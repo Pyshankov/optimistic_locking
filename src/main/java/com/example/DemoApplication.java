@@ -1,7 +1,9 @@
 package com.example;
 
 import com.example.domain.Car;
+import com.example.domain.Item;
 import com.example.repository.CarRepository;
+import com.example.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
 
 @RestController
 @SpringBootApplication
@@ -28,12 +32,19 @@ public class DemoApplication {
 
 
 	@Bean
-	public CommandLineRunner demo(CarRepository repository) {
+	public CommandLineRunner demo(CarRepository repository, ItemRepository itemRepository) {
 		return (args) -> {
 
 			Car car1 = new Car("lexus","bla bla bla");
 			Car car2 = new Car("mercedes","bla bla mercedes");
 			Car car3 = new Car("lada","bla bla bla lada");
+
+			Item i = new Item("blab bla");
+
+			System.out.println(itemRepository.save(i));
+
+			car3.setItems(new ArrayList<>());
+			car3.getItems().add(i);
 
 			System.out.println(repository.save(car1));
 			System.out.println(repository.save(car2));
@@ -47,7 +58,8 @@ public class DemoApplication {
 		if (car.getLastVisibleVersion() != car2.getVersion() )  return new ResponseEntity(HttpStatus.CONFLICT);
 		else {
 			car2.setDescription(car.getDescription());
-			carRepository.save(car2);
+			Car as = carRepository.save(car2);
+			System.out.println(as);
 			return new ResponseEntity(HttpStatus.OK);
 		}
 	}

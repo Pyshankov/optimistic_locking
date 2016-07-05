@@ -3,28 +3,22 @@ package com.example.domain;
 
 
 import javax.persistence.*;
-import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by pyshankov on 24.06.16.
  */
 
 @Entity
-public class Car implements Serializable {
+public class Car  extends AbstractOptimisticLockEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", unique = true, nullable = false)
-    private long id;
     @Column(name = "model",unique = true, nullable = false)
     private String model;
     private String description;
 
-    @Version
-    private Integer version;
-
-    @Transient
-    private Integer lastVisibleVersion;
+    @OneToMany
+    @JoinColumn(name="car_id")
+    private List<Item> items;
 
     public Car(){};
 
@@ -32,19 +26,6 @@ public class Car implements Serializable {
         this.model=model;
         this.description=des;
     };
-
-    @PostLoad
-    public void postLoad(){
-        lastVisibleVersion=version;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getModel() {
         return model;
@@ -62,31 +43,21 @@ public class Car implements Serializable {
         this.description = description;
     }
 
-    public Integer getVersion() {
-        return version;
+    public List<Item> getItems() {
+        return items;
     }
 
-    public void setVersion(Integer version) {
-        this.version = version;
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
-
-    public Integer getLastVisibleVersion() {
-        return lastVisibleVersion;
-    }
-
-    public void setLastVisibleVersion(Integer lastVisibleVersion) {
-        this.lastVisibleVersion = lastVisibleVersion;
-    }
-
 
     @Override
     public String toString() {
         return "Car{" +
-                "id=" + id +
-                ", model='" + model + '\'' +
+                "model='" + model + '\'' +
                 ", description='" + description + '\'' +
-                ", version=" + version +
-                ", lastVisibleVersion=" + lastVisibleVersion +
+                ", items=" + items +
+                 "" + version+
                 '}';
     }
 }
