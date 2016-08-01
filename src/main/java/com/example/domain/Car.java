@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 @Entity
-public class Car  extends AbstractOptimisticLockEntity {
+public class Car extends AbstractOptimisticLockEntity {
 
     @Column(name = "model",unique = true, nullable = false)
     private String model;

@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class AbstractOptimisticLockEntity implements Serializable {
+public abstract class AbstractOptimisticLockEntity<ID> implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -51,23 +51,22 @@ public abstract class AbstractOptimisticLockEntity implements Serializable {
         this.id = id;
     }
 
-
-    @PreUpdate
-    private void prePersist() throws NoSuchFieldException, IllegalAccessException {
-        Field[] fields = this.getClass().getDeclaredFields();
-            for (Field f : fields ){
-                f.setAccessible(true);
-                if(f.get(this) instanceof Iterable ){
-                        Iterable iterable = (Iterable) f.get(this);
-                        iterable.forEach(p -> {
-                            if(p instanceof AbstractOptimisticLockEntity) {
-                               AbstractOptimisticLockEntity ap= ((AbstractOptimisticLockEntity) p);
-                                ap.setVersion(this.version+1);
-                            }
-                        });
-                }
-            }
-    }
+//    @PreUpdate
+//    private void prePersist() throws NoSuchFieldException, IllegalAccessException {
+//        Field[] fields = this.getClass().getDeclaredFields();
+//            for (Field f : fields ){
+//                f.setAccessible(true);
+//                if(f.get(this) instanceof Iterable ){
+//                        Iterable iterable = (Iterable) f.get(this);
+//                        iterable.forEach(p -> {
+//                            if(p instanceof AbstractOptimisticLockEntity) {
+//                               AbstractOptimisticLockEntity ap= ((AbstractOptimisticLockEntity) p);
+//                                ap.setVersion(this.version+1);
+//                            }
+//                        });
+//                }
+//            }
+//    }
 
 
 }
