@@ -1,5 +1,6 @@
 package com.example;
 
+import com.example.component.*;
 import com.example.scope.I;
 import com.example.scope.I1Impl;
 import com.example.scope.I2Impl;
@@ -34,7 +35,11 @@ public class DemoApplication<T> {
 
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+
+		Component letter = new Letter(new AvarageHeader(),new Body(),new SpecialFooter());
+		letter.print();
+
+//		SpringApplication.run(DemoApplication.class, args);
 
 	}
 
@@ -73,7 +78,7 @@ public class DemoApplication<T> {
 	public String getScope(@PathVariable long id){
 		session().setAttribute("id",id);
 		request.doExecute();
-		return  id+"";
+		return  request.toString();
 	}
 
 	public static HttpSession session() {
